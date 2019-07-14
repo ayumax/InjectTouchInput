@@ -12,6 +12,9 @@ public:
 
 	void* GetTouchInfo();
 
+	bool IsEnabledTouch();
+	void UpdateTouchNextState();
+
 private:
 	void SetTouchPoint(int xPos, int yPos);
 
@@ -20,5 +23,7 @@ private:
 
 	int lastXPos = 0;
 	int lastYPos = 0;
+
+	bool isEnable = false;
 };
 

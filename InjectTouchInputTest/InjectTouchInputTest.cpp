@@ -5,29 +5,39 @@
 
 int main()
 {
-	::Sleep(3000);
+	::Sleep(000);
 
 	WindowTouchManager manager;
 
-	manager.InitTouches(1);
+	manager.InitTouches(2);
 
 	manager.TouchDown(0, 100, 300);
 	manager.UpdateAllTouch();
-	::Sleep(10);
+
+	Sleep(50);
+
+	manager.TouchMove(0, 100, 300);
+	manager.UpdateAllTouch();
+
+	manager.TouchDown(1, 100, 300);
+	manager.UpdateAllTouch();
+
+	Sleep(50);
+
+	manager.TouchMove(0, 100, 300);
+	manager.UpdateAllTouch();
+
 
 	manager.TouchMove(0, 100, 350);
 	manager.UpdateAllTouch();
-	::Sleep(10);
-
-	manager.TouchMove(0, 200, 400);
-	manager.UpdateAllTouch();
-	::Sleep(10);
-
-	manager.TouchMove(0, 200, 430);
-	manager.UpdateAllTouch();
-	::Sleep(10);
+	
+	Sleep(50);
 
 	manager.TouchUp(0);
+	manager.UpdateAllTouch();
+	Sleep(50);
+
+	manager.TouchUp(1);
 	manager.UpdateAllTouch();
 
 }

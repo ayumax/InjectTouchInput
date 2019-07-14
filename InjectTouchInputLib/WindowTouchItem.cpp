@@ -28,6 +28,8 @@ void WindowTouchItem::TouchDown(int xPos, int yPos)
 {
 	SetTouchPoint(xPos, yPos);
 	((POINTER_TOUCH_INFO*)TouchInfo)->pointerInfo.pointerFlags = POINTER_FLAG_DOWN | POINTER_FLAG_INRANGE | POINTER_FLAG_INCONTACT;
+
+	isEnable = true;
 }
 
 void WindowTouchItem::TouchMove(int xPos, int yPos)
@@ -62,3 +64,22 @@ void* WindowTouchItem::GetTouchInfo()
 {
 	return TouchInfo;
 }
+
+bool WindowTouchItem::IsEnabledTouch()
+{
+	return isEnable;
+}
+
+void WindowTouchItem::UpdateTouchNextState()
+{
+	POINTER_TOUCH_INFO* _TouchInfo = (POINTER_TOUCH_INFO*)TouchInfo;
+	if (_TouchInfo->pointerInfo.pointerFlags == (POINTER_FLAG_DOWN | POINTER_FLAG_INRANGE | POINTER_FLAG_INCONTACT))
+	{
+		_TouchInfo->pointerInfo.pointerFlags = POINTER_FLAG_UPDATE | POINTER_FLAG_INRANGE | POINTER_FLAG_INCONTACT;
+	}
+	else if (_TouchInfo->pointerInfo.pointerFlags == POINTER_FLAG_UP)
+	{
+		isEnable = false;
+	}
+}
+

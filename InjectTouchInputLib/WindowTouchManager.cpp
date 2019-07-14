@@ -50,16 +50,38 @@ void WindowTouchManager::TouchUp(int TouchID)
 void WindowTouchManager::UpdateAllTouch()
 {
 	POINTER_TOUCH_INFO* touchInfos = new POINTER_TOUCH_INFO[Touches.size()];
+	::memset(touchInfos, 0, sizeof(POINTER_TOUCH_INFO) * Touches.size());
 
+	int setIndex = 0;
 	for (int i = 0; i < (int)Touches.size(); ++i)
 	{
-		::memcpy(&touchInfos[i], Touches[i]->GetTouchInfo(), sizeof(POINTER_TOUCH_INFO));
+		auto _touchItem = Touches[i];
+		if (_touchItem->IsEnabledTouch())
+		{
+			::memcpy(&touchInfos[setIndex], _touchItem->GetTouchInfo(), sizeof(POINTER_TOUCH_INFO));
+			setIndex++;
+		}
 	}
 
-	if (!InjectTouchInput((uint32_t)Touches.size(), touchInfos))
+	if (setIndex > 0)
 	{
-		OutputDebugStringA("fail");
+		if (!InjectTouchInput(setIndex, touchInfos))
+		{
+			DWORD dwError = ::GetLastError();
+			OutputDebugStringA("fail");
+		}
+
+		for (int i = 0; i < (int)Touches.size(); ++i)
+		{
+			auto _touchItem = Touches[i];
+			if (_touchItem->IsEnabledTouch())
+			{
+				_touchItem->UpdateTouchNextState();
+			}
+		}
 	}
+
+	
 
 	delete [] touchInfos;
 }
